@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - JobStep{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="text-center mb-5">
+                <h1 class="display-4 mb-3">Bienvenue sur JobStep</h1>
+                <p class="lead">Votre plateforme d'accompagnement pour une reconversion vers l'emploi</p>
+            </div>
+            
+            {% if app.user %}
+                <div class="alert alert-success p-4 mb-4">
+                    <h3>Bonjour {{ app.user.name }} {{ app.user.lastname }} !</h3>
+                    <p class="lead">Vous êtes connecté en tant que 
+                        {% if is_granted('ROLE_ADMIN') %}
+                            Administrateur
+                        {% elseif is_granted('ROLE_CONSEILLER') %}
+                            Conseiller
+                        {% else %}
+                            Candidat
+                        {% endif %}
+                    </p>
+                </div>
+                
+                <div class="row mt-5">
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-road fa-3x mb-3 text-primary"></i>
+                                <h3 class="card-title">Mes Parcours</h3>
+                                <p class="card-text">Consultez vos parcours et suivez votre progression.</p>
+                                <a href="{{ path('app_parcours_list') }}" class="btn btn-primary">Voir mes parcours</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-envelope fa-3x mb-3 text-primary"></i>
+                                <h3 class="card-title">Messages</h3>
+                                <p class="card-text">Échangez avec vos conseillers ou candidats.</p>
+                                <a href="{{ path('app_message_index') }}" class="btn btn-primary">Voir mes messages</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if is_granted('ROLE_CONSEILLER') or is_granted('ROLE_ADMIN') %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-cogs fa-3x mb-3 text-primary"></i>
+                                    <h3 class="card-title">Gestion</h3>
+                                    <p class="card-text">Gérez les parcours et ressources.</p>
+                                    <a href="{{ path('app_parcours_index') }}" class="btn btn-primary">Administrer</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-file-alt fa-3x mb-3 text-primary"></i>
+                                    <h3 class="card-title">Mes Rendus</h3>
+                                    <p class="card-text">Consultez l'historique de vos travaux soumis.</p>
+                                    <a href="{{ path('app_rendu_index') }}" class="btn btn-primary">Voir mes rendus</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h3 class="card-title">Notre Mission</h3>
+                                <p class="card-text">
+                                    JobStep vous accompagne dans votre transition professionnelle avec un suivi personnalisé 
+                                    par des conseillers expérimentés. Nous vous aidons à élaborer un projet professionnel 
+                                    cohérent et à identifier les formations nécessaires pour réussir votre reconversion.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-title">Comment ça marche ?</h3>
+                                <ol class="card-text">
+                                    <li>Inscrivez-vous sur la plateforme</li>
+                                    <li>Complétez votre profil et votre parcours professionnel</li>
+                                    <li>Échangez avec votre conseiller attitré</li>
+                                    <li>Suivez les étapes de votre parcours personnalisé</li>
+                                    <li>Accomplissez votre reconversion avec succès !</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="mb-0">Connexion / Inscription</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    Rejoignez notre plateforme pour commencer votre parcours de reconversion professionnelle.
+                                </p>
+                                <div class="d-grid gap-3">
+                                    <a href="{{ path('app_login') }}" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-sign-in-alt me-2"></i> Connexion
+                                    </a>
+                                    <a href="{{ path('app_register') }}" class="btn btn-success btn-lg">
+                                        <i class="fas fa-user-plus me-2"></i> Inscription
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Parcours{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <h1 class="mb-4">Mes Parcours</h1>
+    
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    
+    <div class="row">
+        {% if parcours|length > 0 %}
+            {% for p in parcours %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ p.objet }}</h5>
+                            <p class="card-text">{{ p.description|slice(0, 150) }}{% if p.description|length > 150 %}...{% endif %}</p>
+                            <a href="{{ path('app_parcours_show', {'id': p.id}) }}" class="btn btn-primary">
+                                Voir les étapes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Vous n'avez pas encore de parcours assigné.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

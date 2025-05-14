@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Parcours: {{ parcours.objet }}{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{{ parcours.objet }}</h1>
+        <a href="{{ path('app_parcours_list') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Retour
+        </a>
+    </div>
+    
+    <p class="lead mb-4">{{ parcours.description }}</p>
+    
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    
+    <h2 class="mb-3">Étapes du parcours</h2>
+    
+    <div class="list-group">
+        {% for etape in etapes %}
+            <div class="list-group-item">
+                <div class="d-flex w-100 justify-content-between mb-2">
+                    <h5 class="mb-1">Étape {{ etape.position }} : {{ etape.descriptif }}</h5>
+                </div>
+                
+                {% if etape.consignes %}
+                    <p class="mb-3">{{ etape.consignes }}</p>
+                {% endif %}
+                
+                {% if etape.ressources|length > 0 %}
+                    <div class="mb-3">
+                        <h6>Ressources disponibles :</h6>
+                        <div class="list-group">
+                            {# {% for ressource in etape.ressources %}
+                                <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ ressource.intitule }}</strong>
+                                        <span class="badge bg-info ms-2">{{ ressource.support }}</span>
+                                        <span class="badge bg-secondary ms-1">{{ ressource.nature }}</span>
+                                        {% if ressource.presentation %}
+                                            <p class="mb-1 small text-muted">{{ ressource.presentation }}</p>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{{ ressource.url }}" class="btn btn-sm btn-primary" target="_blank" download>
+                                        <i class="fas fa-download me-1"></i> Télécharger
+                                    </a>
+                                </div>
+                            {% endfor %} #}
+
+                            {% for ressource in etape.ressources %}
+    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        <div>
+            <strong>{{ ressource.intitule }}</strong>
+            <span class="badge bg-info ms-2">{{ ressource.support }}</span>
+            <span class="badge bg-secondary ms-1">{{ ressource.nature }}</span>
+            {% if ressource.presentation %}
+                <p class="mb-1 small text-muted">{{ ressource.presentation }}</p>
+            {% endif %}
+        </div>
+        <a href="{{ ressource.url }}" class="btn btn-sm btn-primary" target="_blank" download>
+            <i class="fas fa-download me-1"></i> Télécharger
+        </a>
+    </div>
+{% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                {% set rendu = dernierRendu[etape.id] %}
+                
+                <div class="card mt-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Mon dernier rendu</h6>
+                        <a href="{{ path('app_rendu_submit', {'parcours_id': parcours.id, 'etape_id': etape.id}) }}" class="btn btn-sm btn-success">
+                            <i class="fas fa-upload me-1"></i> Soumettre un rendu
+                        </a>
+                    </div>
+                    
+                    <div class="card-body">
+                        {% if rendu %}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-1">Soumis le {{ rendu.dateHeure|date('d/m/Y à H:i') }}</p>
+                                    <a href="{{ rendu.url }}" target="_blank" class="btn btn-sm btn-outline-secondary" download>
+                                        <i class="fas fa-file-alt me-1"></i> Voir mon rendu
+                                    </a>
+                                </div>
+                                
+                                {% if rendu.message %}
+                                    <a href="{{ path('app_message_show', {'id': rendu.message.id}) }}" class="btn btn-sm btn-info">
+                                        <i class="fas fa-comment me-1"></i> Voir message associé
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <p class="text-muted mb-0">Aucun rendu soumis pour cette étape</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

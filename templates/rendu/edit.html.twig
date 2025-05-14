@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Rendu{% endblock %}
+
+{% block body %}
+    <h1>Edit Rendu</h1>
+
+    {{ include('rendu/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_rendu_index') }}">back to list</a>
+
+    {{ include('rendu/_delete_form.html.twig') }}
+{% endblock %}

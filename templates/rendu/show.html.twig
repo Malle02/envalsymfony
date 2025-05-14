@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du Rendu{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Détails du Rendu</h1>
+        <a href="{{ path('app_rendu_index') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Retour à la liste
+        </a>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Informations</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Parcours</th>
+                                <td>
+                                    <a href="{{ path('app_parcours_show', {'id': rendu.etape.parcours.id}) }}">
+                                        {{ rendu.etape.parcours.objet }}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Étape</th>
+                                <td>{{ rendu.etape.descriptif }}</td>
+                            </tr>
+                            <tr>
+                                <th>Date de soumission</th>
+                                <td>{{ rendu.dateHeure|date('d/m/Y à H:i') }}</td>
+                            </tr>
+                            <tr>
+                                <th>Soumis par</th>
+                                <td>{{ rendu.user.name }} {{ rendu.user.lastname }}</td>
+                            </tr>
+                            <tr>
+                                <th>Fichier</th>
+                                <td>
+                                    <a href="{{ rendu.url }}" class="btn btn-primary" target="_blank" download>
+                                        <i class="fas fa-download me-2"></i> Télécharger
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            {% if rendu.message %}
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Message associé</h5>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ rendu.message.titre }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            De {{ rendu.message.sender.name }} {{ rendu.message.sender.lastname }} 
+                            à {{ rendu.message.receiver.name }} {{ rendu.message.receiver.lastname }}
+                        </h6>
+                        <p class="card-text">{{ rendu.message.contenu|nl2br }}</p>
+                        <a href="{{ path('app_message_show', {'id': rendu.message.id}) }}" class="btn btn-info">
+                            <i class="fas fa-envelope me-2"></i> Voir le message complet
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Consignes de l'étape</h5>
+                </div>
+                <div class="card-body">
+                    {% if rendu.etape.consignes %}
+                        <p>{{ rendu.etape.consignes|nl2br }}</p>
+                    {% else %}
+                        <p class="text-muted">Aucune consigne spécifique pour cette étape.</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Ressources associées</h5>
+                </div>
+                <div class="card-body">
+                    {% if rendu.etape.ressources|length > 0 %}
+                        <ul class="list-group">
+                            {% for ressource in rendu.etape.ressources %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ ressource.intitule }}
+                                    <a href="{{ ressource.url }}" class="btn btn-sm btn-primary" target="_blank" download>
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">Aucune ressource associée à cette étape.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

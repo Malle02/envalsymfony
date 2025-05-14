@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Soumettre un rendu - Étape {{ etape.position }}{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Soumettre un rendu</h1>
+        <a href="{{ path('app_parcours_show', {'id': parcours.id}) }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Retour au parcours
+        </a>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Étape {{ etape.position }} : {{ etape.descriptif }}</h5>
+            {% if etape.consignes %}
+                <p class="card-text">{{ etape.consignes }}</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Soumettre votre travail</h5>
+                </div>
+                <div class="card-body">
+                    {{ form_start(formRendu) }}
+                        {{ form_row(formRendu.fichier) }}
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h6 class="mb-0">Ajouter un message (optionnel)</h6>
+                            </div>
+                            <div class="card-body">
+                                {{ form_start(formMessage) }}
+                                    {{ form_row(formMessage.titre) }}
+                                    {{ form_row(formMessage.contenu) }}
+                                {{ form_end(formMessage, {'render_rest': false}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i> Soumettre le rendu
+                            </button>
+                        </div>
+                    {{ form_end(formRendu, {'render_rest': false}) }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Ressources disponibles</h5>
+                </div>
+                <div class="card-body">
+                    {% if etape.ressources|length > 0 %}
+                        <ul class="list-group">
+                            {% for ressource in etape.ressources %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ ressource.intitule }}
+                                    <a href="{{ ressource.url }}" class="btn btn-sm btn-primary" target="_blank" download>
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted mb-0">Aucune ressource disponible pour cette étape</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
